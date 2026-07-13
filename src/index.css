@@ -1,0 +1,153 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ════════════════ THEME TOKENS ════════════════ */
+:root {
+  --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+  --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+html {
+  scroll-behavior: smooth;
+  /* IMPORTANT: do NOT set overflow-x here. iOS Safari uses <html> as the
+     scrolling viewport container — giving it any overflow value, combined
+     with our several `position: fixed` elements (navbar, cursor, buttons,
+     background), freezes scrolling entirely on iOS. Horizontal-overflow
+     protection is applied on <body> below instead, which is safe. */
+}
+
+/* ════════════════ FONTS ════════════════
+   Single typeface across the site: Inter — chosen for clean,
+   highly-legible UI text at every weight and size.
+   Tailwind's base reset can strip font-family from headings,
+   so we re-apply explicitly here with a full fallback stack. */
+body, h1, h2, h3, h4, h5, h6, p, span, a, li, input, textarea, select, button,
+.font-display {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+html.dark {
+  --bg: #05070D;
+  --bg-2: #0B0F1A;
+  --surface: rgba(255,255,255,0.035);
+  --surface-solid: #0E1320;
+  --border: rgba(255,255,255,0.08);
+  --border-strong: rgba(59,130,246,0.4);
+  --text: #F1F5F9;
+  --text-muted: #8B96A8;
+  --text-dim: #5B6577;
+}
+
+html.light {
+  --bg: #FAFBFF;
+  --bg-2: #F1F4FA;
+  --surface: rgba(15,23,42,0.025);
+  --surface-solid: #FFFFFF;
+  --border: rgba(15,23,42,0.08);
+  --border-strong: rgba(59,130,246,0.35);
+  --text: #0F172A;
+  --text-muted: #56607A;
+  --text-dim: #94A0B8;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden; /* safe here — body isn't the iOS viewport scroller, html is */
+  -webkit-font-smoothing: antialiased;
+  transition: background 0.4s ease, color 0.4s ease;
+  -webkit-overflow-scrolling: touch; /* momentum scrolling on iOS */
+}
+
+@media (max-width: 768px) {
+  html {
+    /* `scroll-behavior: smooth` + heavy JS scroll listeners is the classic
+       mobile-jank combo; native momentum scroll feels smoother on touch. */
+    scroll-behavior: auto;
+  }
+  body {
+    transition: background 0.3s ease, color 0.3s ease; /* shorter theme-switch transition, less to paint */
+  }
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: #3B82F6; border-radius: 4px; }
+
+/* ════════════════ SWIPER OVERRIDES ════════════════ */
+.swiper-pagination-bullet {
+  background: var(--text-dim) !important;
+  opacity: 1 !important;
+}
+.swiper-pagination-bullet-active {
+  background: #3B82F6 !important;
+  width: 22px !important;
+  border-radius: 4px !important;
+  transition: width 0.3s !important;
+}
+.swiper-button-next, .swiper-button-prev {
+  color: #3B82F6 !important;
+  background: rgba(59,130,246,0.1) !important;
+  width: 42px !important; height: 42px !important;
+  border-radius: 50% !important;
+  border: 1px solid rgba(59,130,246,0.25) !important;
+}
+.swiper-button-next::after, .swiper-button-prev::after {
+  font-size: 14px !important; font-weight: 700 !important;
+}
+
+/* ════════════════ UTILITY CLASSES ════════════════ */
+
+/* Ambient background blobs — full effect on desktop,
+   lighter/static on mobile to avoid scroll jank. */
+.bg-blob {
+  filter: blur(100px);
+  animation: blob 12s infinite;
+  will-change: transform, border-radius;
+}
+@media (max-width: 768px) {
+  .bg-blob {
+    filter: blur(60px);
+    animation: none; /* morphing border-radius repaint is the main mobile jank source */
+    transform: none !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bg-blob { animation: none; }
+}
+
+.grad-text {
+  background: linear-gradient(135deg,#3B82F6 0%,#06B6D4 50%,#8B5CF6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.glass {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(20px);
+}
+
+.bg-noise {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.4'/%3E%3C/svg%3E");
+}
+
+/* Accessibility: visible focus rings */
+a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
+  outline: 2px solid #3B82F6;
+  outline-offset: 2px;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
