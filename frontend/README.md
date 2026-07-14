@@ -194,3 +194,4 @@ defined per theme in `src/index.css` under `html.dark` and `html.light`. Toggle 
 
 Let me know which of these to build next, and I'll add them with the same reusable,
 config-driven pattern.
+
