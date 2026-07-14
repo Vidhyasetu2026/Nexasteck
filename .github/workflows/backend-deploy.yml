@@ -1,0 +1,42 @@
+name: Backend Deploy
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "backend/**"
+      - ".github/workflows/backend-deploy.yml"
+
+jobs:
+  deploy-backend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy backend to VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_PORT }}
+          script: |
+            set -e
+
+            export PM2_HOME=/root/.pm2
+            export PATH=$PATH:/root/.local/share/pnpm:/usr/local/bin:/usr/bin
+
+            cd /var/www/Nexasteck
+            git fetch origin main
+            git reset --hard origin/main
+
+            cd /var/www/Nexasteck/backend
+            pnpm install --frozen-lockfile
+            pnpm run build
+
+            if pm2 describe nexasteck-backend >/dev/null 2>&1; then
+              pm2 restart nexasteck-backend
+            else
+              pm2 start /var/www/Nexasteck/backend/dist/server.js --name nexasteck-backend
+            fi
+
+            pm2 save

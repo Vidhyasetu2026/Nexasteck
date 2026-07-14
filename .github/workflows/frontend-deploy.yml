@@ -1,0 +1,33 @@
+name: Frontend Deploy
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "frontend/**"
+      - ".github/workflows/frontend-deploy.yml"
+
+jobs:
+  deploy-frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy frontend to VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_PORT }}
+          script: |
+            set -e
+
+            export PATH=$PATH:/root/.local/share/pnpm:/usr/local/bin:/usr/bin
+
+            cd /var/www/Nexasteck
+            git fetch origin main
+            git reset --hard origin/main
+
+            cd /var/www/Nexasteck/frontend
+            pnpm install --frozen-lockfile
+            pnpm run build
