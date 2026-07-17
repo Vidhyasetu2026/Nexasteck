@@ -111,6 +111,24 @@ export default function Footer() {
           <p className="text-xs" style={{ color: "var(--text-dim)" }}>
             © {new Date().getFullYear()} {SITE.name}. All rights reserved.
           </p>
+                      <div className="flex items-center gap-4">
+              <Link
+                to="/privacy-policy"
+                className="text-xs hover:text-brand-blue transition-colors"
+                style={{ color: "var(--text-dim)" }}
+              >
+                Privacy Policy
+              </Link>
+              <span className="w-1 h-1 rounded-full" style={{ background: "var(--text-dim)" }} />
+              <Link
+                to="/terms-and-conditions"
+                className="text-xs hover:text-brand-blue transition-colors"
+                style={{ color: "var(--text-dim)" }}
+              >
+                Terms & Conditions
+              </Link>
+            </div>
+
           <div className="flex gap-3">
             {[
               { icon: FiInstagram, url: SITE.social.instagram },

@@ -5,6 +5,8 @@
 
 export const SITE = {
   name: "Nexasteck",
+  companyName:"Nexasteck Private Limited",
+  websiteLink:"https://nexasteck.com",
   shortName: "NS",
   tagline: "Premium Software Development Agency",
   email: "info@Nexasteck.com",

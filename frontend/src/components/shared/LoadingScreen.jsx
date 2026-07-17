@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { SITE } from "../../data/siteData";
+import logo from "/logo.png";
 
 export default function LoadingScreen() {
   const [loading, setLoading] = useState(true);
@@ -30,9 +31,15 @@ export default function LoadingScreen() {
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.5 }}
-            className="w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-blue to-brand-cyan flex items-center justify-center font-display font-extrabold text-2xl text-white mb-6 shadow-glow-blue"
+            // className="w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-blue to-brand-cyan flex items-center justify-center font-display font-extrabold text-2xl text-white mb-6 shadow-glow-blue"
+            className="w-16 h-16 rounded-2xl flex items-center justify-center font-display font-extrabold text-2xl text-white mb-6 shadow-glow-blue"
           >
-            {SITE.shortName}
+            <img
+              src={logo}
+              alt="Nexasteck Logo"
+              className="w-10 h-10 object-contain"
+            />
+            {/* {SITE.shortName} */}
           </motion.div>
           <div className="w-48 h-[3px] bg-white/10 rounded-full overflow-hidden">
             <motion.div

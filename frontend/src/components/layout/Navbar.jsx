@@ -6,6 +6,8 @@ import ThemeToggle from "../shared/ThemeToggle";
 import RouterButton from "../ui/RouterButton";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import { SITE, NAV_LINKS } from "../../data/siteData";
+import logo from "/logo.png";
+
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -47,25 +49,26 @@ export default function Navbar() {
         <div className="max-w-7xl mx-auto px-6 md:px-10 h-[72px] flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-[10px] bg-gradient-to-br from-brand-blue to-brand-cyan flex items-center justify-center font-display font-extrabold text-white text-sm">
-              {SITE.shortName}
-            </div>
-            <span className="font-display font-extrabold text-xl tracking-tight grad-text">
+            <img
+              src={logo}
+              alt="Nexasteck Logo"
+              className="w-50 h-10 object-contain"
+            />
+
+            {/* <span className="font-display font-extrabold text-xl tracking-tight grad-text">
               {SITE.name}
-            </span>
+            </span> */}
           </Link>
 
           {/* Desktop links */}
           <ul className="hidden lg:flex items-center gap-9">
             {NAV_LINKS.map((l) => {
-              // Hash-only links like "/#process" are scroll anchors,
-              // not real pages — never highlight them as active.
               const isHashLink = l.path.includes("#");
               const isActive = !isHashLink && (
                 l.path === "/"
                   ? location.pathname === "/"
                   : location.pathname === l.path ||
-                    location.pathname.startsWith(l.path + "/")
+                  location.pathname.startsWith(l.path + "/")
               );
 
               return (
@@ -128,7 +131,7 @@ export default function Navbar() {
                   l.path === "/"
                     ? location.pathname === "/"
                     : location.pathname === l.path ||
-                      location.pathname.startsWith(l.path + "/")
+                    location.pathname.startsWith(l.path + "/")
                 );
 
                 return (

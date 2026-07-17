@@ -20,6 +20,8 @@ import ProjectDetail from "./pages/ProjectDetail";
 import Process from "./pages/Process";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import Terms from "./pages/Terms";
 
 export default function App() {
   const location = useLocation();
@@ -43,6 +45,8 @@ export default function App() {
             <Route path="/portfolio/:id" element={<PageTransition><ProjectDetail /></PageTransition>} />
             <Route path="/process" element={<PageTransition><Process /></PageTransition>} />
             <Route path="/contact" element={<PageTransition><Contact /></PageTransition>} />
+            <Route path="/privacy-policy" element={<PageTransition><PrivacyPolicy /></PageTransition>} />
+            <Route path="/terms-and-conditions" element={<PageTransition><Terms /></PageTransition>} />
             <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
           </Routes>
         </AnimatePresence>
