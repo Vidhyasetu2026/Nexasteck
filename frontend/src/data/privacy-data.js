@@ -1,3 +1,4 @@
+import { SITE } from "./siteData";
 export const PRIVACY_POLICY = {
     effectiveDate: "01 August 2026",
     lastUpdated: "01 August 2026",
