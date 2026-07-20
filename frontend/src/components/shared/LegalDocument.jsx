@@ -136,6 +136,9 @@ function DocSection({ section, index }) {
 }
 
 function TocSidebar({ sections, activeId }) {
+    const listRef = useRef(null);
+    const itemRefs = useRef({});
+
     const scrollTo = (id) => {
         const el = document.getElementById(id);
         if (el) {
@@ -143,6 +146,25 @@ function TocSidebar({ sections, activeId }) {
             window.scrollTo({ top: y, behavior: "smooth" });
         }
     };
+
+    // Keep the active nav item visible inside the scrollable sidebar list —
+    // otherwise, once you scroll past the first few points, the highlighted
+    // one drifts out of view and you can't tell which section is showing.
+    useEffect(() => {
+        const activeEl = itemRefs.current[activeId];
+        const container = listRef.current;
+        if (!activeEl || !container) return;
+
+        const containerRect = container.getBoundingClientRect();
+        const activeRect = activeEl.getBoundingClientRect();
+        const isHidden =
+            activeRect.top < containerRect.top ||
+            activeRect.bottom > containerRect.bottom;
+
+        if (isHidden) {
+            activeEl.scrollIntoView({ block: "nearest", behavior: "smooth" });
+        }
+    }, [activeId]);
 
     return (
         <nav className="hidden lg:block sticky top-32 self-start w-64 shrink-0">
@@ -155,11 +177,17 @@ function TocSidebar({ sections, activeId }) {
                     On this page
                 </div>
 
-                <ul className="space-y-1 max-h-[60vh] overflow-y-auto pr-1">
+                <ul
+                    ref={listRef}
+                    className="space-y-1 max-h-[60vh] overflow-y-auto pr-1"
+                >
                     {sections.map((section, i) => {
                         const active = activeId === section.id;
                         return (
-                            <li key={section.id}>
+                            <li
+                                key={section.id}
+                                ref={(el) => (itemRefs.current[section.id] = el)}
+                            >
                                 <button
                                     onClick={() => scrollTo(section.id)}
                                     className="w-full flex items-center gap-3 text-left text-sm py-2 px-3 rounded-lg transition-colors"
@@ -191,6 +219,8 @@ function TocSidebar({ sections, activeId }) {
 }
 
 function MobileTocStrip({ sections, activeId }) {
+    const itemRefs = useRef({});
+
     const scrollTo = (id) => {
         const el = document.getElementById(id);
         if (el) {
@@ -198,6 +228,18 @@ function MobileTocStrip({ sections, activeId }) {
             window.scrollTo({ top: y, behavior: "smooth" });
         }
     };
+
+    // Same idea as the desktop sidebar, but horizontal: keep the active
+    // pill scrolled into view within the strip.
+    useEffect(() => {
+        const activeEl = itemRefs.current[activeId];
+        if (!activeEl) return;
+        activeEl.scrollIntoView({
+            block: "nearest",
+            inline: "center",
+            behavior: "smooth"
+        });
+    }, [activeId]);
 
     return (
         <div className="lg:hidden -mx-6 mb-8 px-6 overflow-x-auto">
@@ -207,6 +249,7 @@ function MobileTocStrip({ sections, activeId }) {
                     return (
                         <button
                             key={section.id}
+                            ref={(el) => (itemRefs.current[section.id] = el)}
                             onClick={() => scrollTo(section.id)}
                             className="whitespace-nowrap text-xs font-semibold px-4 py-2 rounded-full border transition-colors"
                             style={{
@@ -395,7 +438,8 @@ export default function LegalDocument({
                     </Reveal>
                 </div>
             </section>
-            {/* <CTASection /> */}
+
+            <CTASection />
         </>
     );
 }
